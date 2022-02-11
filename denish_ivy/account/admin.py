@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import  Customer, Product, Order, Tag, Info
+from .models import  Customer, Product, Order, Tag
 
 # Register your models here.
 @admin.register(Customer)
@@ -18,8 +18,6 @@ admin.site.register(Tag)
 class orderadmin(admin.ModelAdmin):
     list_display = ('id', 'customer', 'product', 'date_created', 'status')
 
-
-admin.site.register(Info)
 
 
     
