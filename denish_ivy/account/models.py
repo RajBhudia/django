@@ -13,29 +13,27 @@ class Customer(models.Model):
         return self.name
 
 class Tag(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.name
-
-
 
 
 class Product(models.Model):
-    CATEGORIES =(
-        ('Indor', 'Indor'),
-        ('Outdor', 'Outdor'),
-    )
-    name = models.CharField(max_length=100)
-    price = models.FloatField()
-    category = models.CharField(max_length=100, choices=CATEGORIES, default='')
-    description = models.CharField(max_length=100)
-    date_created = models.DateTimeField(auto_now_add=True)
-    tag = models.ManyToManyField(Tag)
+	CATEGORY = (
+			('Indoor', 'Indoor'),
+			('Out Door', 'Out Door'),
+			) 
 
-    def __str__(self):
-        return self.name
-        
+	name = models.CharField(max_length=200, null=True)
+	price = models.FloatField(null=True)
+	category = models.CharField(max_length=200, null=True, choices=CATEGORY)
+	description = models.CharField(max_length=200, null=True, blank=True)
+	date_created = models.DateTimeField(auto_now_add=True, null=True)
+	tags = models.ManyToManyField(Tag)
+
+	def __str__(self):
+		return self.name
 
 
 class Order(models.Model):
@@ -47,14 +45,23 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
     
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    date_created = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
     status = models.CharField(max_length=100, choices=STATUS, default='')
+    note = models.CharField(max_length=1000, null=True)
 
 
     def __str__(self):
         return self.product.name
 
 
+
+
+
+
+
+
+
+	
 
 
 
