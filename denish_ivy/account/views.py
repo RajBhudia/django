@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect 
 from django.http import HttpResponse
+from django.views import View
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
 
@@ -8,6 +9,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
+
+
+
+from django.views.generic.list import ListView
+
+from django.views.generic.base import TemplateView
+
+from account.models import *
 
 # Create your views here.
 from .models import *
@@ -134,3 +143,30 @@ def deleteOrder(request, pk):
 
 	context = {'item':order}
 	return render(request, 'account/delet.html', context)
+
+
+# class MyView(View):
+# 	def get(self, request, *args, **kwargs):
+# 		return HttpResponse('Hello, World!')
+
+
+class HomePageView(ListView):
+
+	model = Customer
+	def get(self, request, *args, **kwargs):
+		return HttpResponse(request, 'login.html')
+
+
+class CustomerView(TemplateView):
+	template_name = "customer.html"
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context["name"] = Customer.objects.all() 
+		return context
+		
+
+class MyView(View):
+    def get(self, request):
+        # <view logic>
+        return HttpResponse('Hello world')
