@@ -16,7 +16,10 @@ from django.views.generic.list import ListView
 
 from django.views.generic.base import TemplateView
 
-from account.models import *
+from account.models import Customer, Product
+
+from django.shortcuts import get_object_or_404
+from django.views.generic.base import RedirectView
 
 # Create your views here.
 from .models import *
@@ -145,28 +148,39 @@ def deleteOrder(request, pk):
 	return render(request, 'account/delet.html', context)
 
 
-# class MyView(View):
-# 	def get(self, request, *args, **kwargs):
-# 		return HttpResponse('Hello, World!')
+class MyView(View):
+
+		"""This is master class base view. all othwer class base inherit from it.
+
+		some of the HTTP method view can accept are ['get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace']"""
+
+		def get(self, request, *args, **kwargs):
+			return HttpResponse('Hello, World!')
+
 
 
 class HomePageView(ListView):
 
-	model = Customer
-	def get(self, request, *args, **kwargs):
-		return HttpResponse(request, 'login.html')
+	model = Product
+	def get(self, request):
+		return (self, 'products.html')
+
 
 
 class CustomerView(TemplateView):
+
+	"""It helps us to render templates context with given URL"""
 	template_name = "customer.html"
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		context["name"] = Customer.objects.all() 
+		context = Customer.objects.all() 
 		return context
 		
 
-class MyView(View):
-    def get(self, request):
-        # <view logic>
-        return HttpResponse('Hello world')
+class ProductView(RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        article = get_object_or_404(Article, pk=kwargs['pk'])
+        article.update_counter()
+        return super().get_redirect_url(*args, **kwargs)

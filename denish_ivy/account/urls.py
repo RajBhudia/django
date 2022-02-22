@@ -3,6 +3,8 @@ from . import views
 from django.contrib.auth import views as auth_views
 from account.views import MyView, HomePageView
 from .views import HomePageView , CustomerView
+from django.views.generic.base import RedirectView
+from account.views import ProductView
 
 
 urlpatterns = [
@@ -24,8 +26,16 @@ urlpatterns = [
     path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(), name= "password_reset_complete"),
 
 
-    # path('mine/', MyView.as_view(), name='my-view'),
-    path ('dashboard', HomePageView.as_view(template_name = "login.html"), name='home'),
+    path('mine/', MyView.as_view(), name='my-view'),
+    path ('product/', HomePageView.as_view(template_name = "products.html"), name='product'),
     path('temp1/', CustomerView.as_view(template_name = "customer.html"), name='customer'),
     path('about/', MyView.as_view()),
-]
+    
+
+
+
+
+    path('v_product/', RedirectView.as_view(url='http://127.0.0.1:8000/products/'), name='product'),
+    path('v_dashboard/', RedirectView.as_view(url='http://127.0.0.1:8000/'), name='products'),
+
+]    
