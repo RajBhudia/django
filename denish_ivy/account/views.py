@@ -178,9 +178,29 @@ class CustomerView(TemplateView):
 		return context
 		
 
-class ProductView(RedirectView):
+class ProductView(View):
+	def get(self, request):
+		products = Product.objects.all()
+		return render(request, 'account/products.html', {'products':products})
+       
+       
 
-    def get_redirect_url(self, *args, **kwargs):
-        article = get_object_or_404(Article, pk=kwargs['pk'])
-        article.update_counter()
-        return super().get_redirect_url(*args, **kwargs)
+class DashboardView(View):
+	def get(self, request):
+		return render(request, 'account/dashboard.html')
+
+class CustomerView(View):
+	def get(self, request, pk_test):
+
+		customer = Customer.objects.get(id=pk_test)
+
+		orders = customer.order_set.all()
+		order_count = orders.count()
+
+		myFilter = OrderFilter(request.GET, queryset=orders)
+		orders = myFilter.qs 
+
+		context = {'customer':customer, 'orders':orders, 'order_count':order_count,
+		'myFilter':myFilter}
+		return render(request, 'account/customer.html',context)
+

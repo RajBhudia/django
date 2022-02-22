@@ -14,7 +14,7 @@ urlpatterns = [
 
     path('', views.home, name="home"),
     path('products/', views.products, name='products'),
-    path('customer/<str:pk_test>/', views.customer, name="customer"),
+   # path('customer/<str:pk_test>/', views.customer, name="customer"),
 
     path('create_order/<str:pk>/', views.createOrder, name="create_order"),
     path('update_order/<str:pk>/', views.updateOrder, name="update_order"),
@@ -28,14 +28,15 @@ urlpatterns = [
 
     path('mine/', MyView.as_view(), name='my-view'),
     path ('product/', HomePageView.as_view(template_name = "products.html"), name='product'),
-    path('temp1/', CustomerView.as_view(template_name = "customer.html"), name='customer'),
+    
     path('about/', MyView.as_view()),
     
 
 
 
 
-    path('v_product/', RedirectView.as_view(url='http://127.0.0.1:8000/products/'), name='product'),
-    path('v_dashboard/', RedirectView.as_view(url='http://127.0.0.1:8000/'), name='products'),
+    path('c_product/', views.ProductView.as_view(), name='product'),
+    path('c_dashboard/', views.DashboardView.as_view(), name='dashbaord'),
+    path('c_customer/<str:pk_test>/', views.CustomerView.as_view(), name='customer'),
 
 ]    
