@@ -31,12 +31,22 @@ urlpatterns = [
     
     path('about/', MyView.as_view()),
     
-
+    path('c_custom/<str:pk_test>/', views.Customer1View.as_view(template_name='account/customer.html'), name='customer'),
 
 
 
     path('c_product/', views.ProductView.as_view(), name='product'),
     path('c_dashboard/', views.DashboardView.as_view(), name='dashbaord'),
     path('c_customer/<str:pk_test>/', views.CustomerView.as_view(), name='customer'),
+    path('c_create_order/<str:pk>/', views.CreateOrderView.as_view(), name='create order'),
+    path('c_register/', views.RegisterView.as_view(), name='register'),
+    path('c_update_order/<str:pk>/', views.UpdateOrderView.as_view(), name='update_order'),
+    path('c_delet_order/<str:pk>/',views.DeletOrderView.as_view(), name='delet_order'),
+
+
+
+    path('ad/', views.HomeTemplateView.as_view(template_name='account/dashboard.html'), name='home'),
+  
+
 
 ]    

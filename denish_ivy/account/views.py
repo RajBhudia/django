@@ -147,6 +147,8 @@ def deleteOrder(request, pk):
 	context = {'item':order}
 	return render(request, 'account/delet.html', context)
 
+##########################################################################################################
+"""view base class base view"""
 
 class MyView(View):
 
@@ -167,15 +169,16 @@ class HomePageView(ListView):
 
 
 
-class CustomerView(TemplateView):
+class Customer1View(View):
+
+	"""have to research on it exact use of it, pending"""
 
 	"""It helps us to render templates context with given URL"""
-	template_name = "customer.html"
+	template_name = ''
 
-	def get_context_data(self, **kwargs):
-		context = super().get_context_data(**kwargs)
-		context = Customer.objects.all() 
-		return context
+	def get_context_data(self, request, pk_test):
+		customer = Customer.objects.all(id=pk_test) 
+		return render(request, self.template_name, {'customer':customer})
 		
 
 class ProductView(View):
@@ -204,3 +207,92 @@ class CustomerView(View):
 		'myFilter':myFilter}
 		return render(request, 'account/customer.html',context)
 
+
+class CreateOrderView(View):
+	def get(self, request, pk):
+		OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=2 )
+		customer = Customer.objects.get(id=pk)
+		formset = OrderFormSet(queryset=Order.objects.none(),instance=customer)
+		#form = OrderForm(initial={'customer':customer})
+		if request.method == 'POST':
+			#print('Printing POST:', request.POST)
+			form = OrderForm(request.POST)
+			formset = OrderFormSet(request.POST, instance=customer)
+			if formset.is_valid():
+				formset.save()
+				return redirect('/')
+
+		context = {'form':formset}
+		return render(request, 'account/order_form.html', context)
+
+
+class RegisterView(View):
+	# def get(self, request):
+	# 	if request.user.is_authenticated:
+	# 		return redirect('home')		
+	def post(self, request):
+		form = CreateUserForm()
+		form = CreateUserForm(request.POST)
+		if form.is_valid():
+			form.save()
+			user = form.cleaned_data.get('username')
+			messages.success(request, 'Account was created for ' + user)
+			return redirect('login')
+						
+
+		context = {'form':form}
+		return render(request, 'account/register.html', context)
+
+class UpdateOrderView(View):
+	# def get(self, request, pk):
+	# 	order = Order.objects.get(id=pk)
+	# 	forms = OrderForm(instance=order)
+	# 	# return render(request, 'account/order_form.html')
+	def post(self, request, pk):
+		order = Order.objects.get(id=pk)
+		form = OrderForm(request.POST, instance=order)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+
+		context = {'form':form}
+		return render(request, 'account/order_form.html', context)
+
+class DeletOrderView(View):
+	def get(self, request, pk):
+		order = Order.objects.get(id=pk)
+		if request.method == "POST":
+			order.delete()
+			return redirect('/')
+
+		context = {'item':order}
+		return render(request, 'account/delet.html', context)
+
+
+
+###################################################
+"""Templates views"""
+
+# #class TemplateView(TemplatesResponseMixin, ContentMixin, view)
+# it will use all 3 names given in brackets and in hertit them 
+
+"""with the help of template view we can redirect URl"""
+
+class HomeTemplateView(TemplateView):
+ template_name = 'account/dashboard.html'
+
+ def get_context_data(self, **kwargs):
+	 
+		orders = Order.objects.all()
+		customers = Customer.objects.all()
+
+		total_customers = customers.count()
+
+		total_orders = orders.count()
+		delivered = orders.filter(status='Delivered').count()
+		pending = orders.filter(status='Pending').count()
+
+		context = {'orders':orders, 'customers':customers,
+		'total_orders':total_orders,'delivered':delivered,
+		'pending':pending }
+		return context
