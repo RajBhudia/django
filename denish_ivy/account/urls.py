@@ -46,6 +46,18 @@ urlpatterns = [
 
 
     path('ad/', views.HomeTemplateView.as_view(template_name='account/dashboard.html'), name='home'),
+    
+
+    # we can also use as_view(extra_context = {''}) function but we have to keep in mind in views.py there must not be a context dictionary
+
+    path('extra/', views.HomeTemplateView.as_view(extra_context= {'name = python'}), name='extra demo'),
+
+    path('hom/', views.RedirectView.as_view(url = 'http://127.0.0.1:8000/'), name='home'),
+    path('index/', views.RedirectView.as_view(url = '/'), name='index'),
+
+    path('home/<int:pk>/', views.GeetRedirectView.as_view(), name='geet'),
+    path('<int:pk>/', views.TemplateView.as_view(template_name='account/home.html'), name='mindex'),
+
   
 
 

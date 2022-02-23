@@ -276,7 +276,10 @@ class DeletOrderView(View):
 # #class TemplateView(TemplatesResponseMixin, ContentMixin, view)
 # it will use all 3 names given in brackets and in hertit them 
 
-"""with the help of template view we can redirect URl"""
+"""with th help of template view we can redirect URl"""
+
+# class HomeTemplateView(TemplateView):
+#  template_name = 'account/customer.html'
 
 class HomeTemplateView(TemplateView):
  template_name = 'account/dashboard.html'
@@ -296,3 +299,25 @@ class HomeTemplateView(TemplateView):
 		'total_orders':total_orders,'delivered':delivered,
 		'pending':pending }
 		return context
+
+"""context = super().get_context data(**kwargs) with the help of this we can add data in html page
+	ex:- context['demo'] = trail,  just add demo in html form tag it will show trail in output"""
+
+
+#########################################################################
+"""RedirectView"""
+"""It is use to redirect to given or predefine example
+	if http://127.0.0.1:8000/ is home url  
+	and if we hit  url like this http://127.0.0.1:8000/index or home it will redirect to http://127.0.0.1:8000/ instead of showing index or home"""
+""" Common use is to hit """
+
+class GeetRedirectView(RedirectView):
+ pattern_name = 'mindex'
+ permanent = True
+ query_string = True
+
+ def get_redirect_url(self, *args, **kwargs):
+  print(kwargs)
+  kwargs['pk'] = 16
+  return super().get_redirect_url(*args, **kwargs)
+
