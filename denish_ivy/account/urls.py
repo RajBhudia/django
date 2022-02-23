@@ -5,6 +5,8 @@ from account.views import MyView, HomePageView
 from .views import HomePageView , CustomerView
 from django.views.generic.base import RedirectView
 from account.views import ProductView
+from django.views.generic.detail import DetailView
+from django.views.generic import ListView
 
 
 urlpatterns = [
@@ -58,7 +60,14 @@ urlpatterns = [
     path('home/<int:pk>/', views.GeetRedirectView.as_view(), name='geet'),
     path('<int:pk>/', views.TemplateView.as_view(template_name='account/home.html'), name='mindex'),
 
+    path('student1/<int:pk>', views.Customer1DetailView.as_view(), name='studentdetail'),
   
+    path('student/', views.CustomerListView.as_view(), name='studentlist'),
+    path('student/<int:pk>', views.CustomerDetailView.as_view(), name='studentdetail'),
+
+
+    path('product_list/', views.ProductList.as_view(), name ='product_list')
+
 
 
 ]    

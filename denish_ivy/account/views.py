@@ -20,6 +20,7 @@ from account.models import Customer, Product
 
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import RedirectView
+from django.views.generic.detail import DetailView
 
 # Create your views here.
 from .models import *
@@ -273,7 +274,7 @@ class DeletOrderView(View):
 ###################################################
 """Templates views"""
 
-# #class TemplateView(TemplatesResponseMixin, ContentMixin, view)
+# class TemplateView(TemplatesResponseMixin, ContentMixin, view)
 # it will use all 3 names given in brackets and in hertit them 
 
 """with th help of template view we can redirect URl"""
@@ -320,4 +321,42 @@ class GeetRedirectView(RedirectView):
   print(kwargs)
   kwargs['pk'] = 16
   return super().get_redirect_url(*args, **kwargs)
+
+  ##################################
+  """DetailView"""
+
+  """it provides the detail of specific object
+	genrally use to view detail of specific object"""
+
+class Customer1DetailView(DetailView):
+ model = Customer
+ template_name = 'account/customer.html'
+ context_object_name = 'customer'
+ pk_url_kwarg = 'pk'
+
+class CustomerDetailView(DetailView):
+ model = Customer
+ template_name = 'account/customer.html'
+
+ def get_context_data(self, *args, **kwargs):
+  context = super().get_context_data(*args, **kwargs)
+  context['all_customer'] = self.model.objects.all().order_by('name')    #mismatch
+  return context
+
+class CustomerListView(ListView):
+ model = Customer
+ template_name = 'account/customer.html'
+
+#####################################
+"""ListView"""
+
+"""IT is use to list out all the objects of model"""
+"""Example it will list all products of product model"""
+
+class ProductList(ListView):
+	model = Product
+	template_name = 'account/products.html'    #search research ajx
+
+##############################
+
 
