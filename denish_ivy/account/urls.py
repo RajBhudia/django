@@ -66,8 +66,12 @@ urlpatterns = [
     path('student/<int:pk>', views.CustomerDetailView.as_view(), name='studentdetail'),
 
 
-    path('product_list/', views.ProductList.as_view(), name ='product_list')
+    path('product_list/', views.ProductList.as_view(), name ='product_list'),
+
+
+    path('contact/', views.ContactFormView.as_view(), name='contact' ),
+    path('thankyou/', views.ThanksTemplateView.as_view(), name='thankyou' ),
+]
 
 
 
-]    

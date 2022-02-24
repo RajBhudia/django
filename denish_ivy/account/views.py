@@ -357,6 +357,27 @@ class ProductList(ListView):
 	model = Product
 	template_name = 'account/products.html'    #search research ajx
 
+	"""Q lookup"""
+
 ##############################
 
 
+"""FormView"""
+
+from django.views.generic.edit import FormView
+
+class ContactFormView(FormView):
+ template_name = 'account/contact.html'
+ form_class = CreateUserForm
+ success_url = '/thankyou/'
+ initial = {'name':'Sonam'}
+ def form_valid(self, form):
+  print(form)
+  print(form.cleaned_data['name'])
+  print(form.cleaned_data['email'])
+  print(form.cleaned_data['msg'])
+  return super().form_valid(form)
+  # return HttpResponse('Msg Sent')
+
+class ThanksTemplateView(TemplateView):
+ template_name = 'account/thankyou.html'
